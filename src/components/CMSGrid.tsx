@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SyntheticEvent,ChangeEvent, FunctionComponent } from "react";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,25 +18,47 @@ import { SearchBar } from "./SearchBar";
 
 const { REACT_APP_DATABASE_URL = "http://localhost" } = process.env
 
+type DeliveryAddress = {
+  billing_address: string;
+  physical_address: string;
+}
+interface IData {
+id : string;
+first_name: string;
+last_name: string;
+billing_address: string;
+physical_address: string;
+created_date: string;
+_id?: string;
+delivery_address? : DeliveryAddress;
+code?: string;
+}
+
 function createData(
-    id,
-    first_name,
-    last_name,
-    delivery_address,
-    created_date,
-  ) {
+    id: string,
+    first_name: string,
+    last_name: string,
+    delivery_address: DeliveryAddress ,
+    created_date: string,
+  ) : IData {
     const {  billing_address = "", physical_address ="" } = delivery_address
     return { id, first_name, last_name, billing_address, physical_address, created_date };
   }
-  
 
+  interface IColumn {
+    id: string;
+    label: string;
+    minWidth: number;
+    align: "center" | "inherit" | "left" | "right" | "justify" ;
+    fontSize: string;
+  }
 export const CMSGrid = () =>{
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const [rows, setRows] = useState([])
-    const [filterData, setFilterData] = useState([])
+    const [rows, setRows] = useState<IData[] | []>([])
+    const [filterData, setFilterData] = useState<IData[] | []>([])
 
     const [loaded, setLoaded] = useState(false)
     const [searchValue, setSearchValue] = useState("")
@@ -53,50 +75,50 @@ export const CMSGrid = () =>{
     })
 
     
-  const columns = [
-    { id: 'first_name', label: 'First Name', minWidth: 100, align: 'center', fontSize: "20px" },
-    { id: 'last_name', label: 'Last Name', minWidth: 100 , align: 'center',fontSize: "20px" },
+  const columns: IColumn[] = [
+    { id: 'first_name', label: 'First Name', minWidth: 100, align: 'center', fontSize: "1rem" },
+    { id: 'last_name', label: 'Last Name', minWidth: 100 , align: 'center',fontSize: "1rem" },
     {
       id: 'billing_address',
       label: 'Billing Address',
       minWidth: 130,
       align: 'center',
-      fontSize: "20px" 
+      fontSize: "1rem" 
     },
     {
       id: 'physical_address',
       label: 'Physical Address',
       minWidth: 170,
       align: 'center',
-      fontSize: "20px" 
+      fontSize: "1rem" 
     },
     {
       id: 'created_date',
       label: 'Created Date',
       minWidth: 130,
       align: 'center',
-      fontSize: "20px" 
+      fontSize: "1rem" 
     },
     {
         id: 'actions',
         label: 'Actions',
         minWidth: 70,
         align: 'center',
-        fontSize: "20px" 
+        fontSize: "1rem" 
       },
   ];
 
  
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
       };
     
-    const handleChangeRowsPerPage = (event) => {
+    const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
       };
 
-      const handleEditButton = (data)=>{
+      const handleEditButton = (data: IData)=>{
         setShowModal((prev)=> {
              return {
             ...prev,
@@ -105,7 +127,7 @@ export const CMSGrid = () =>{
         }})
       }
 
-      const handleDeleteButton = (data)=>{
+      const handleDeleteButton = (data: IData)=>{
         setShowModal((prev)=> {
             return {
            ...prev,
@@ -114,7 +136,7 @@ export const CMSGrid = () =>{
        }})
       }
 
-      const handleSearch = (e)=>{
+      const handleSearch = (e: ChangeEvent<HTMLInputElement>)=>{
         const { value } = e.target
         setSearchValue(value)
         const compare_data = rows.map(({
@@ -137,12 +159,12 @@ export const CMSGrid = () =>{
           
         })
         const matched_data_ids = compare_data.filter((data)=>data.stringified_data.includes(value.toLowerCase())).map(({id})=> id)
-        const filtered_data = rows.filter((row)=> matched_data_ids.includes(row.id))
+        const filtered_data: IData[] = rows.filter((row)=> matched_data_ids.includes(row.id))
         setFilterData(filtered_data)
         setPage(0)
       }
 
-      const handleConfirmDelete =  (id, handleClose, handleLoading) =>{
+      const handleConfirmDelete =  (id: string, handleClose:any, handleLoading:any) =>{
         setConfirmModify((prev)=>{
             return {
                 ...prev,
@@ -181,7 +203,7 @@ export const CMSGrid = () =>{
             handleClose()
         })
       }
-      const handleConfirmEdit =  (data, handleClose, handleLoading) =>{
+      const handleConfirmEdit =  (data: IData, handleClose:any, handleLoading:any) =>{
         setConfirmModify((prev)=>{
             return {
                 ...prev,
@@ -251,29 +273,29 @@ export const CMSGrid = () =>{
         })
       }
 
-    const generateActions = (row) =>{
+    const generateActions = (row: IData) : JSX.Element =>{
         return (
-            <div>
+            <>
             <IconButton color="primary" onClick={()=>handleEditButton(row)}>
                 <EditIcon/>
             </IconButton>
             <IconButton color="error" onClick={()=>handleDeleteButton(row)}>
                 <DeleteIcon/>
             </IconButton>
-            </div>
+            </>
         )
       }
 
       useEffect(()=>{
         helper.APICALL.GET(`${REACT_APP_DATABASE_URL}/records`).then(({data})=>{
-            const new_format_data = data.map(({_id,first_name, last_name, delivery_address, created_date})=> {
+            const new_format_data : IData[] = data.map(({_id ,first_name, last_name, delivery_address, created_date}: IData)=> {
                 return {
                     id:_id,
                     first_name,
                     last_name,
                     created_date,
-                    billing_address: delivery_address.billing_address,
-                    physical_address: delivery_address.physical_address
+                    billing_address: delivery_address?.billing_address,
+                    physical_address: delivery_address?.physical_address
                 }
             })
             setLoaded(true)
@@ -324,14 +346,14 @@ export const CMSGrid = () =>{
              {filterData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                .map((row) => {
                  return (
-                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                   <TableRow hover role="checkbox" tabIndex={-1} key={row?.code}>
                      {columns.map((column) => {
-                       const value = row[column.id];
+                       const value : any = row[column.id as keyof IData];
                        return (
-                         <TableCell id={filterData.id} key={column.id} align={column.align} style={{fontSize: column.font_size}}>
-                           {column.id === "actions" && filterData.length ? 
+                         <TableCell id={column?.id} key={column.id} align={column.align} style={{fontSize: column?.fontSize}}>
+                           {(column?.id === "actions" && filterData.length ? 
                                generateActions(row)
-                            : column.id === "created_date" ? new Date(value).toDateString() : value }
+                            : column?.id === "created_date" ? new Date(value).toDateString() : value)  as JSX.Element } 
 
                          </TableCell>
                        );
@@ -362,8 +384,8 @@ export const CMSGrid = () =>{
             data: edit_data,
             handleConfirmEdit
         }}>
-          {confirm_edit && <CircularProgress size={20} style={{margin: "auto", top : "75%", left:"47%", position: "absolute"}}>
-            </CircularProgress>}
+          {confirm_edit && 
+          <CircularProgress size={20} style={{margin: "auto", top : "75%", left:"47%", position: "absolute"}}/>}
           </EditModal>}
         {showDelete && <DeleteDialog {...{
             toggle: showDelete,

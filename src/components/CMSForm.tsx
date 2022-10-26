@@ -1,5 +1,5 @@
 import { FormControl, Button, TextField, Modal, Box, Typography,CircularProgress} from "@mui/material";
-import { useState } from "react";
+import { useState , ChangeEvent, SyntheticEvent} from "react";
 import { Navigate } from "react-router-dom";
 import { helper } from "../utils/helper"
 
@@ -17,7 +17,7 @@ export const CMSForm = () => {
     submit_attempt: false
   })
 
-  const handleOnChange = (e) =>{
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) =>{
     setFormDetails((prevState)=>({
       ...prevState,
       [e.target.id]: e.target.value
@@ -26,7 +26,7 @@ export const CMSForm = () => {
   const handleModal = () =>{
     setModal(!openModal)
   }
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e: SyntheticEvent)=>{
     e.preventDefault();
     const form_answers = Object.values(formDetails)
     //checks if all answers are existing
@@ -60,7 +60,7 @@ export const CMSForm = () => {
       })
   }
 
-  const handleReset = (e)=>{
+  const handleReset = (e: SyntheticEvent)=>{
     setFormDetails({
       first_name: "",
       last_name: "",
@@ -122,7 +122,6 @@ export const CMSForm = () => {
 
     <Button
             style={{margin: 5}}
-            type="click"
             variant="contained"
             color="primary"
             // className={classes.submit}

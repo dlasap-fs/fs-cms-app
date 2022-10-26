@@ -24,7 +24,7 @@ export const helper = {
         throw new Error(JSON.stringify(e as AxiosError));
       }
     },
-    DELETE: async (url: string, id: string) => {
+    DELETE: async (url: string, id?: string) => {
       try {
         return await axios.delete(url, { id } as AxiosRequestConfig);
       } catch (e: unknown) {
