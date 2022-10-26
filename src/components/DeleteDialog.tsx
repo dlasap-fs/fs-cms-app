@@ -7,8 +7,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
+import {IDeleteDialogProps, IShowModal} from "./types"
 
-function PaperComponent(props) {
+function PaperComponent(props: PaperProps) {
   return (
     <Draggable
       handle="#draggable-dialog-title"
@@ -19,7 +20,7 @@ function PaperComponent(props) {
   );
 }
 
-export default function DeleteDialog(props) {
+export default function DeleteDialog(props: IDeleteDialogProps) {
   const { toggle = true, title = "", message = "", data : {
     first_name,
     last_name,
@@ -27,10 +28,10 @@ export default function DeleteDialog(props) {
   }, setShowModal, handleConfirmDelete} = props
 
   const [open, setOpen] = React.useState(toggle);
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState<boolean>(false)
   
   const handleClose = () => {
-    setShowModal((prev)=>{
+    setShowModal((prev: IShowModal)=>{
       return {
         ...prev,
         showDelete: false
@@ -59,7 +60,7 @@ export default function DeleteDialog(props) {
            {last_name}, {first_name}
           </DialogContentText>
         </DialogContent>
-        {props.children}
+        {props?.children}
         <DialogActions>
           <Button autoFocus disabled={loading} onClick={handleClose}>
             Cancel

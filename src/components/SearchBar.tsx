@@ -2,9 +2,10 @@ import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
+import { ISearchProps } from "./types";
 
-export const SearchBar = (props) =>{
-    const {  handleSearch} = props
+export const SearchBar = (props: ISearchProps) =>{
+    const { handleSearch } = props
     return (
         <form>
         <TextField

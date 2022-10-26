@@ -3,7 +3,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { TextField } from '@mui/material';
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
+import { IData, IModalProps , IShowModal} from './types';
 
 const style = {
     position: 'absolute',
@@ -18,19 +19,27 @@ const style = {
     margin: "auto",
   };
 
-export const EditModal = (props)=>{
-  const { data = {}, setShowModal, title = "Title", toggle = true, handleConfirmEdit} = props ?? {}
+ 
+export const EditModal = (props: IModalProps)=>{
+  const { data = {
+  id: "",
+  first_name: "",
+  last_name: "",
+  billing_address: "",
+  physical_address: "",
+  created_date: ""
+  } ?? {}, setShowModal, title = "Title", toggle = true, handleConfirmEdit} = props ?? {}
     const [open, setOpen] = useState(toggle);
 
-    const [details, setDetails ] = useState(data)
-    const [loading, setLoading] = useState(false)
+    const [details, setDetails ] = useState<IData>(data)
+    const [loading, setLoading] = useState<boolean>(false)
     
-    const handleLoading = (val) =>{
+    const handleLoading = (val: boolean) =>{
       setLoading(val)
     }
     const handleClose = () =>{
       setOpen(false)
-      setShowModal((prev)=>{
+      setShowModal((prev: IShowModal)=>{
         return {
           ...prev,
           showEdit: false
@@ -38,7 +47,7 @@ export const EditModal = (props)=>{
       })
     }
     const handleModal = () =>{
-      setShowModal((prev)=>{
+      setShowModal((prev: IShowModal)=>{
         return {
           ...prev,
           showEdit: !toggle
@@ -46,7 +55,7 @@ export const EditModal = (props)=>{
       })
     };
 
-    const handleType = (e) =>{
+    const handleType = (e: ChangeEvent<HTMLInputElement>) =>{
       const { id, value} = e.target
       setDetails((prev)=>{
         return {
@@ -73,11 +82,11 @@ export const EditModal = (props)=>{
             <Typography style={{minHeight: "50px", fontWeight:"bold"}}id="modal-modal-title" variant="h4" component="h4">
               {title}
             </Typography>
-            <TextField onChange={(e)=> handleType(e)} style={{padding: "10px"}} id="first_name" label="First Name" size='small' value={details.first_name ?? ""}/>
+            <TextField onChange={(e: ChangeEvent<HTMLInputElement>)=> handleType(e)} style={{padding: "10px"}} id="first_name" label="First Name" size='small' value={details.first_name ?? ""}/>
             <TextField onChange={handleType} style={{padding: "10px"}} id="last_name" label="Last Name" size='small' value={details.last_name ?? ""}/>
             <TextField onChange={handleType} style={{padding: "10px"}} id="billing_address" size='small' label="Billing Address"  value={details.billing_address ?? ""}/>
             <TextField onChange={handleType} style={{padding: "10px"}} id="physical_address" size='small' label="Physical Address"  value={details.physical_address ?? ""}/>
-            {props.children}
+            {props?.children}
               <Button style={{ left: "430px"}} disabled={loading} variant="contained" color="success" 
               onClick={handleSubmit}> Edit </Button>
               <Button style={{ left: "280px"}} disabled={loading} onClick={handleModal}> Cancel </Button>

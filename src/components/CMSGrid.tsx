@@ -15,24 +15,10 @@ import { helper } from "../utils/helper";
 import { EditModal } from "./EditModal";
 import DeleteDialog from "./DeleteDialog";
 import { SearchBar } from "./SearchBar";
+import {IColumn, IData, DeliveryAddress, IShowModal } from "./types"
 
 const { REACT_APP_DATABASE_URL = "http://localhost" } = process.env
 
-type DeliveryAddress = {
-  billing_address: string;
-  physical_address: string;
-}
-interface IData {
-id : string;
-first_name: string;
-last_name: string;
-billing_address: string;
-physical_address: string;
-created_date: string;
-_id?: string;
-delivery_address? : DeliveryAddress;
-code?: string;
-}
 
 function createData(
     id: string,
@@ -45,13 +31,6 @@ function createData(
     return { id, first_name, last_name, billing_address, physical_address, created_date };
   }
 
-  interface IColumn {
-    id: string;
-    label: string;
-    minWidth: number;
-    align: "center" | "inherit" | "left" | "right" | "justify" ;
-    fontSize: string;
-  }
 export const CMSGrid = () =>{
 
     const [page, setPage] = useState(0);
@@ -63,11 +42,25 @@ export const CMSGrid = () =>{
     const [loaded, setLoaded] = useState(false)
     const [searchValue, setSearchValue] = useState("")
 
-    const [{showEdit, showDelete, edit_data, delete_data}, setShowModal] = useState({
+    const [{showEdit, showDelete, edit_data, delete_data}, setShowModal] = useState<IShowModal>({
         showEdit : false,
         showDelete: false,
-        edit_data : {},
-        delete_data : {}
+        edit_data : {
+          id: "",
+          first_name: "",
+          last_name: "",
+          billing_address: "",
+          physical_address: "",
+          created_date: ""
+        },
+        delete_data : {
+          id: "",
+          first_name: "",
+          last_name: "",
+          billing_address: "",
+          physical_address: "",
+          created_date: ""
+        }
     })
     const [{confirm_delete, confirm_edit}, setConfirmModify] = useState({
         confirm_delete: false,
@@ -107,7 +100,6 @@ export const CMSGrid = () =>{
         fontSize: "1rem" 
       },
   ];
-
  
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -383,9 +375,9 @@ export const CMSGrid = () =>{
             setShowModal,
             data: edit_data,
             handleConfirmEdit
-        }}>
-          {confirm_edit && 
-          <CircularProgress size={20} style={{margin: "auto", top : "75%", left:"47%", position: "absolute"}}/>}
+        }}> 
+          {(confirm_edit && 
+          <CircularProgress size={20} style={{margin: "auto", top : "75%", left:"47%", position: "absolute"}}/> as any)}
           </EditModal>}
         {showDelete && <DeleteDialog {...{
             toggle: showDelete,
@@ -395,7 +387,7 @@ export const CMSGrid = () =>{
             setShowModal,
             handleConfirmDelete,
         }}>
-            {confirm_delete && <CircularProgress size={20} style={{margin: "auto"}}/>}
+            {(confirm_delete && <CircularProgress size={20} style={{margin: "auto"}}/>) as JSX.Element}
             </DeleteDialog>}
       </Paper>
    
