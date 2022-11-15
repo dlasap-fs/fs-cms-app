@@ -291,7 +291,7 @@ export const CMSGrid = () => {
     !filterData.length && !searchValue && setFilterData(rows);
   }, [rows.length]);
   return (
-    <Paper sx={{ height: "35em", minWidth: "70%", maxWidth: "90%", marginTop: "1.5em" }}>
+    <Paper sx={{ height: "34.75em", width: "90%", maxWidth: "90%", marginTop: "1.5em" }}>
       <TableContainer sx={{ minHeight: "50%", maxHeight: "500px" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
