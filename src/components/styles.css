@@ -1,5 +1,6 @@
 .CMS-Form-Container {
-  margin: 50px 0px;
+  margin: 30px 0px;
+  padding-bottom: 20px;
   border-radius: 30px;
   align-items: center;
   justify-content: center;
@@ -7,11 +8,12 @@
   display: flex;
   width: 400px;
   height: 500px;
-  background: linear-gradient(to bottom, white, rgb(197, 230, 201), white);
+  background: linear-gradient(to bottom, white, rgb(197, 230, 201), rgb(227, 230, 228));
 }
 .CMS-Form-Container h2 {
-  color: rgb(241, 234, 234);
-  font-size: 30px;
+  color: rgb(4, 24, 7);
+  font-size: 35px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 .CMS-Form-Title {
   background: linear-gradient(to top, rgb(17, 100, 17), rgb(103, 206, 43), rgb(208, 235, 196));
@@ -31,11 +33,11 @@
   margin: 10px 0px;
 }
 .CMS-Form-Button-Container {
-  width: 80%;
+  width: 70%;
   display: flex;
+  align-items: center;
   justify-content: space-evenly;
-  margin: 2px;
 }
 .CMS-Form-Button {
-  width: 150px;
+  width: 120px;
 }

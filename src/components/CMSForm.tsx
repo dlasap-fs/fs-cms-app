@@ -122,8 +122,6 @@ export const CMSForm = () => {
         </div>
         <div></div>
 
-        <Box>{openLoader && <CircularProgress color="warning" />}</Box>
-
         <div>
           {formDetails.submit_attempt && isVerified && <Navigate replace to="/submitted"></Navigate>}
           <Modal
@@ -150,10 +148,13 @@ export const CMSForm = () => {
         </div>
       </FormControl>
       <div className="CMS-Form-Button-Container">
-        <Button variant="contained" color="primary" className="CMS-Form-Button" onClick={handleSubmit} disabled={openLoader}>
+        <div>
+          <Box>{openLoader && <CircularProgress color="warning" />}</Box>
+        </div>
+        <Button variant="contained" size="small" color="primary" className="CMS-Form-Button" onClick={handleSubmit} disabled={openLoader}>
           Submit Form
         </Button>
-        <Button className="CMS-Form-Button" type="submit" variant="contained" color="error" onClick={handleReset} disabled={openLoader}>
+        <Button className="CMS-Form-Button" size="small" type="submit" variant="contained" color="error" onClick={handleReset} disabled={openLoader}>
           Reset Form
         </Button>
       </div>
