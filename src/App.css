@@ -21,7 +21,7 @@
 
 .App-header {
   position: fixed;
-  background: linear-gradient(to right, white, rgb(74, 119, 74), rgb(116, 177, 69), rgb(26, 114, 26), white);
+  background: linear-gradient(170deg, white, rgb(74, 119, 74), rgb(116, 177, 69), rgb(26, 114, 26), white);
   border-radius: 10px;
   padding: 5px 0px;
   width: 100%;
@@ -36,7 +36,7 @@
 .App-footer {
   position: sticky;
   margin-top: 1.5em;
-  background: linear-gradient(to right, white, rgb(74, 119, 74), rgb(116, 177, 69), rgb(26, 114, 26), white);
+  background: linear-gradient(170deg, white, rgb(74, 119, 74), rgb(116, 177, 69), rgb(26, 114, 26), white);
   border-radius: 10px;
   padding: 5px 0px;
   width: 100%;
